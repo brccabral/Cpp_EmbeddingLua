@@ -15,6 +15,7 @@ extern "C"
 int main()
 {
     std::string cmd = "a = 7 + 11";
+    // std::string cmd = "a = 7 + 11asas"; // ERROR
 
     lua_State *L = luaL_newstate();
 

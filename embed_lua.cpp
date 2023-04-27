@@ -26,29 +26,12 @@ bool CheckLua(lua_State *L, int r)
 
 int main()
 {
-    // std::string cmd = "a = 7 + 11";
-    // std::string cmd = "a = 7 + 11asas"; // ERROR
-
-    std::string cmd = "a = 7 + 11 + math.sin(23.7)";
-
     lua_State *L = luaL_newstate();
 
     // * tell Lua to add standard libraries (like math)
     luaL_openlibs(L);
 
-    if (CheckLua(L, luaL_dostring(L, cmd.c_str())))
-    {
-        lua_getglobal(L, "a");
-        if (lua_isnumber(L, -1))
-        {
-            float a_in_cpp = (float)lua_tonumber(L, -1);
-            std::cout << "a_in_cpp = " << a_in_cpp << std::endl;
-        }
-    }
-
-    cmd = "a = a + 100";
-    
-    if (CheckLua(L, luaL_dostring(L, cmd.c_str())))
+    if (CheckLua(L, luaL_dofile(L, "video_example.lua")))
     {
         lua_getglobal(L, "a");
         if (lua_isnumber(L, -1))

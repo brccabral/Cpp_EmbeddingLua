@@ -23,4 +23,12 @@ install(FILES
 add_custom_command(TARGET embed_lua POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy "${LUA_DIR}/lua53.dll" "${CMAKE_CURRENT_BINARY_DIR}/lua53.dll"
 )
+
+install(FILES 
+    "video_example.lua"
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+
+add_custom_command(TARGET embed_lua POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy "../video_example.lua" "${CMAKE_CURRENT_BINARY_DIR}/video_example.lua"
+)
 endif()

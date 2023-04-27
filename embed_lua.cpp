@@ -45,8 +45,29 @@ int main()
         if (lua_isstring(L, -1))
         {
             player.name = lua_tostring(L, -1);
-            std::cout << "player.name = " << player.name << std::endl;
         }
+        lua_getglobal(L, "PlayerTitle");
+        if (lua_isstring(L, -1))
+        {
+            player.title = lua_tostring(L, -1);
+        }
+        lua_getglobal(L, "PlayerFamily");
+        if (lua_isstring(L, -1))
+        {
+            player.family = lua_tostring(L, -1);
+        }
+        lua_getglobal(L, "PlayerLevel");
+        if (lua_isinteger(L, -1))
+        {
+            player.level = lua_tointeger(L, -1);
+        }
+
+        std::cout
+            << "player.title = " << player.title
+            << " player.name = " << player.name
+            << " player.family = " << player.family
+            << " player.level = " << player.level
+            << std::endl;
     }
 
     system("pause");

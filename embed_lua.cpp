@@ -41,33 +41,51 @@ int main()
 
     if (CheckLua(L, luaL_dofile(L, "video_example.lua")))
     {
-        lua_getglobal(L, "PlayerName");
-        if (lua_isstring(L, -1))
+        lua_getglobal(L, "AddStuff");
+        if (lua_isfunction(L, -1))
         {
-            player.name = lua_tostring(L, -1);
-        }
-        lua_getglobal(L, "PlayerTitle");
-        if (lua_isstring(L, -1))
-        {
-            player.title = lua_tostring(L, -1);
-        }
-        lua_getglobal(L, "PlayerFamily");
-        if (lua_isstring(L, -1))
-        {
-            player.family = lua_tostring(L, -1);
-        }
-        lua_getglobal(L, "PlayerLevel");
-        if (lua_isinteger(L, -1))
-        {
-            player.level = lua_tointeger(L, -1);
+            lua_pushnumber(L, 3.5f);
+            lua_pushnumber(L, 7.1f);
+
+            // lua_pcall - number of inputs, number of outputs, error handling
+            if (CheckLua(L, lua_pcall(L, 2, 1, 0)))
+            {
+                std::cout << "[C++] Called in Lua 'AddStuff(3.5f, 7.1f)', got " << (float)lua_tonumber(L, -1) << std::endl;
+            }
         }
 
-        std::cout
-            << "player.title = " << player.title
-            << " player.name = " << player.name
-            << " player.family = " << player.family
-            << " player.level = " << player.level
-            << std::endl;
+        /*lua_getglobal(L, "Player");
+        if (lua_istable(L, -1))
+        {
+
+            lua_pushstring(L, "Name");
+            lua_gettable(L, -2);
+            player.name = lua_tostring(L, -1);
+            lua_pop(L, 1);
+
+            lua_pushstring(L, "Family");
+            lua_gettable(L, -2);
+            player.family = lua_tostring(L, -1);
+            lua_pop(L, 1);
+
+            lua_pushstring(L, "Title");
+            lua_gettable(L, -2);
+            player.title = lua_tostring(L, -1);
+            lua_pop(L, 1);
+
+            lua_pushstring(L, "Level");
+            lua_gettable(L, -2);
+            player.level = lua_tointeger(L, -1);
+            lua_pop(L, 1);
+
+            std::cout
+                << "player.title = " << player.title
+                << " player.name = " << player.name
+                << " player.family = " << player.family
+                << " player.level = " << player.level
+                << std::endl;
+
+        }*/
     }
 
     system("pause");

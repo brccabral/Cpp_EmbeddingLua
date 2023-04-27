@@ -1,0 +1,5 @@
+.vscode
+build_dir/
+build_win/
+install_dir/
+install_win/

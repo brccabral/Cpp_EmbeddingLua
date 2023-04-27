@@ -24,6 +24,19 @@ bool CheckLua(lua_State *L, int r)
     return true;
 }
 
+int lua_HostFunction(lua_State *L)
+{
+    // this funtion will be called by Lua
+
+    float a = (float)lua_tonumber(L, 1);
+    float b = (float)lua_tonumber(L, 2);
+    std::cout << "[C++] HostFunction(" << a << ", " << b << ") called." << std::endl;
+    float c = a * b;
+    lua_pushnumber(L, c);
+
+    return 1; // * number of values the Lua function will return
+}
+
 int main()
 {
     struct Player
@@ -39,45 +52,21 @@ int main()
     // * tell Lua to add standard libraries (like math)
     luaL_openlibs(L);
 
+    // tell Lua that HostFunction in Lua is lua_HostFunction in C++
+    lua_register(L, "HostFunction", lua_HostFunction);
+
     if (CheckLua(L, luaL_dofile(L, "video_example.lua")))
     {
-        lua_getglobal(L, "GetPlayer");
+        lua_getglobal(L, "DoAThing");
         if (lua_isfunction(L, -1))
         {
-            lua_pushnumber(L, 1);
+            lua_pushnumber(L, 5.0f);
+            lua_pushnumber(L, 6.0f);
 
             // lua_pcall - number of inputs, number of outputs, error handling
-            if (CheckLua(L, lua_pcall(L, 1, 1, 0)))
+            if (CheckLua(L, lua_pcall(L, 2, 1, 0)))
             {
-                if (lua_istable(L, -1))
-                {
-                    lua_pushstring(L, "Name");
-                    lua_gettable(L, -2);
-                    player.name = lua_tostring(L, -1);
-                    lua_pop(L, 1);
-
-                    lua_pushstring(L, "Family");
-                    lua_gettable(L, -2);
-                    player.family = lua_tostring(L, -1);
-                    lua_pop(L, 1);
-
-                    lua_pushstring(L, "Title");
-                    lua_gettable(L, -2);
-                    player.title = lua_tostring(L, -1);
-                    lua_pop(L, 1);
-
-                    lua_pushstring(L, "Level");
-                    lua_gettable(L, -2);
-                    player.level = lua_tointeger(L, -1);
-                    lua_pop(L, 1);
-
-                    std::cout
-                        << "player.title = " << player.title
-                        << " player.name = " << player.name
-                        << " player.family = " << player.family
-                        << " player.level = " << player.level
-                        << std::endl;
-                }
+                std::cout << "[C++] Called in Lua 'DoAThing(5.0f, 6.0f)' got " << (float)lua_tonumber(L, -1) << std::endl;
             }
         }
     }

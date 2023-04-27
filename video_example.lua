@@ -10,3 +10,10 @@ end
 function GetPlayer(n)
     return Players[n]
 end
+
+-- HostFunction is defined in C++
+function DoAThing(a, b)
+    print("[LUA] DoAThing("..a..", "..b..") \n")
+    local c = HostFunction(a + 10, b * 3)
+    return c
+end

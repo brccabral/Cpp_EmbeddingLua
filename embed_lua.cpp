@@ -71,7 +71,8 @@ int main()
         }
     }
 
-    system("pause");
+    std::string i;
+    std::cin >> i;
     lua_close(L);
 
     return EXIT_SUCCESS;
